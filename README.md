@@ -46,3 +46,10 @@ I'll provide Simple Template of AWS CodePipeline, which will be triggered by git
   --capabilities CAPABILITY_NAMED_IAM
 
 ~~~
+
+## Trigger Your BuildProject
+---
+- After complate deploy cloudformation template, you can execute build.
+- If your repository don't have buildspec.yml in project root, you can copy from this repository. In order for your application to build correctly, you will need modify your buildspec.yml, especially run-times, prebuild, build phase. 
+- Now, you push code to your repository main branch, your build project will execute build as you specified in buildspec.yml
+
