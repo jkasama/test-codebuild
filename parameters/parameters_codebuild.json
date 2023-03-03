@@ -1,0 +1,14 @@
+[
+    {
+        "ParameterKey": "ArtifactBucketName",
+        "ParameterValue": "<Your Artifact S3 Bucket Name>"
+    },
+    {
+        "ParameterKey": "BuildProjectName",
+        "ParameterValue": "<Build Project Name>"
+    },
+    {
+        "ParameterKey": "SourceLocationURL",
+        "ParameterValue": "https://github.com/<USER ID>/<REPOSITORY NAME>.git"
+    }
+]

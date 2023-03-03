@@ -6,7 +6,7 @@ phases:
       java: corretto11
   pre_build:
     commans: 
-      - echo Nothing to do in the pre_build phases.....
+      - echo DO-SOMETHING PRE BUILD PHASE
 
   build: 
     commands:
@@ -14,8 +14,7 @@ phases:
   
   post_build: 
     commands:
-      - echo DO-SOMETHING AFTER BUILD phases.....
-      - echo hgoehoge
+      - echo DO-SOMETHING AFTER BUILD PHASE
 
 artifacts:
   files:
