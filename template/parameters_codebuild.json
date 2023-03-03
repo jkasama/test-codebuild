@@ -1,0 +1,14 @@
+[
+    {
+        "ParameterKey": "ArtifactBucketName",
+        "ParameterValue": "test-codepipeline-artifact-bucket-20230303"
+    },
+    {
+        "ParameterKey": "BuildProjectName",
+        "ParameterValue": "TestSimpleGitHUBSourceBuildProjectUSEast-1"
+    },
+    {
+        "ParameterKey": "SourceLocationURL",
+        "ParameterValue": "https://github.com/jkasama/test-codebuild.git"
+    }
+]

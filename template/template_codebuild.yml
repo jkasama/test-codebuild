@@ -1,0 +1,92 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Sample CodePipeline Bucket For Test CodePipeline
+
+Parameters:
+  ArtifactBucketName:
+    Type: String
+    Description: S3 Bucket Name For Artifacts of Sample CodePipeline.
+  BuildProjectName:
+    Type: String
+    Description: Name for Sampe Build Project
+  SourceLocationURL:
+    Type: String
+    Description: URL For Github repository of Source Code.
+
+Resources:
+  BuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Description: Sample Build Project
+      Artifacts:
+        ArtifactIdentifier: 'SampleArtifactBucket'
+        EncryptionDisabled: false
+        Location: !Ref ArtifactBucketName
+        Name: !Sub ${BuildProjectName}-artifact.zip
+        NamespaceType: BUILD_ID
+        Path: !Ref BuildProjectName
+        Packaging: ZIP
+        Type: S3
+      ConcurrentBuildLimit: 1
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/standard:5.0
+        ImagePullCredentialsType: CODEBUILD
+        PrivilegedMode: true
+        Type: LINUX_CONTAINER
+      Name: !Ref BuildProjectName
+      LogsConfig: 
+        CloudWatchLogs:
+          GroupName: !Ref BuildProjectName
+          Status: ENABLED
+      ServiceRole: !GetAtt BuildProjectServiceRole.Arn
+      Source: 
+        Auth:
+          Type: OAUTH
+        Location: !Ref SourceLocationURL
+        Type: GITHUB
+      Triggers:
+        Webhook: true
+        FilterGroups:
+          - - Pattern: PUSH, PULL_REQUEST_MERGED
+              Type: EVENT
+            - Pattern: ^refs/heads/main
+              Type: HEAD_REF
+
+  BuildProjectServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub CodeBuild-${BuildProjectName}-ServiceRole
+      Description: !Sub 'IAM Role For Codebuild ${BuildProjectName} Access to Artifact Bucket and CloudWatch'
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement: 
+          Effect: Allow
+          Action: 
+            - 'sts:AssumeRole'
+          Principal:
+            Service:
+              - 'codebuild.amazonaws.com'
+      Path: '/CodeBuild/'
+      Policies:
+        - PolicyName: !Sub CodeBuild-${BuildProjectName}-ResourceAccessPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Sid: AllowAccessToArtifactBucket
+                Effect: Allow
+                Action: 
+                  - 's3:GetObject'
+                  - 's3:PutObject'
+                  - 's3:ListBucket'
+                Resource: 
+                  - !Join
+                    - ''
+                    - - 'arn:aws:s3:::'
+                      - !Ref ArtifactBucketName
+                      - '/*'
+              - Sid: AllowAccessToCloudWatchLogs
+                Effect: Allow 
+                Action:
+                  - 'logs:*'
+                Resource: '*'
