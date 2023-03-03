@@ -32,17 +32,17 @@ I'll provide Simple Template of AWS CodePipeline, which will be triggered by git
 - Deploy S3 Bucket (Optional)
 
 ~~~
- aws cloudformation --region <REGION> --stack-name <STACK-NAME>  //
-  --template-file file://templates/template_s3bucket.yml // 
+ aws cloudformation --region <REGION> --stack-name <STACK-NAME>  \\
+  --template-file file://templates/template_s3bucket.yml \\
   --parameter-override file://parameters/parameters_s3bucket.yml
 ~~~
 
 - Deploy Codebuild Project
 
 ~~~
- aws cloudformation --region <REGION> --stack-name <STACK-NAME> //
-  --template-file file://templates/template_codebuild.yml //
-  --parameter-override file://parameters/parameters_codebuild.json //
+ aws cloudformation --region <REGION> --stack-name <STACK-NAME> \\
+  --template-file file://templates/template_codebuild.yml \\
+  --parameter-override file://parameters/parameters_codebuild.json \\
   --capabilities CAPABILITY_NAMED_IAM
 
 ~~~
